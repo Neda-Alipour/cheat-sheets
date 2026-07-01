@@ -33,7 +33,7 @@ git version 2.xx.x
 ## 2. Configure Your Identity
 
 ```bash
-git config --global user.name "Neda Alipour"
+git config --global user.name "your_name"
 
 git config --global user.email "your_email@example.com"
 
