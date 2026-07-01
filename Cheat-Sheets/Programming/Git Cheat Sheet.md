@@ -1,316 +1,612 @@
-# 🟩 Git Cheat Sheet
 
-
-\## 🧠 \*\*Core Git Concepts\*\*
-
-
-
-| Concept                  | Description                                                                                                       |
-
-| ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
-
-| \*\*Repository (Repo)\*\*    | A directory where Git tracks all changes. Can be local or remote (e.g., GitHub).                                  |
-
-| \*\*Commit\*\*               | A snapshot of changes. Each commit has a unique ID (hash).                                                        |
-
-| \*\*Branch\*\*               | A pointer to a specific line of development. `main` or `master` is usually the default branch.                    |
-
-| \*\*HEAD\*\*                 | The current commit your working directory is based on. Usually points to the latest commit on the current branch. |
-
-| \*\*Staging Area (Index)\*\* | A place where changes are prepared before committing.                                                             |
-
-| \*\*Remote\*\*               | A version of your repository hosted elsewhere (e.g., GitHub, GitLab).                                             |
-
-| \*\*Merge\*\*                | Combines changes from one branch into another.                                                                    |
-
-| \*\*Rebase\*\*               | Moves or combines commits from one branch onto another, rewriting history.                                        |
-
-| \*\*Detached HEAD\*\*        | When HEAD points directly to a commit instead of a branch.                                                        |
-
-| \*\*Conflict\*\*             | Happens when two branches change the same part of a file differently.                                             |
-
-
+# 🟩 Git & GitHub Cheat Sheet (Complete Beginner → Intermediate)
 
 ---
 
+# 🧠 Git vs GitHub
 
-
-\## ⚙️ \*\*Setup \& Configuration\*\*
-
-
-
-
-git config --global user.name "Your Name"
-
-git config --global user.email "you@example.com"
-
-git config --list                      # View config
-
-
-
+| Git                                                 | GitHub                              |
+| --------------------------------------------------- | ----------------------------------- |
+| Version control software installed on your computer | Website that hosts Git repositories |
+| Works offline                                       | Requires internet                   |
+| Tracks code history                                 | Stores repositories online          |
+| `git` command                                       | github.com                          |
 
 ---
 
+# ⚙️ First-Time Setup (One Time Only)
 
+## 1. Install Git
 
-\## 📁 \*\*Creating \& Cloning Repos\*\*
+```bash
+git --version
+```
 
+Example:
 
-
-git init                               # Initialize a new repository
-
-git clone <url>                        # Clone an existing repo
-
-git clone <url> <folder>               # Clone into a specific folder
-
-
-
-
----
-
-
-
-\## 🔍 \*\*Status, Diff, and Log\*\*
-
-
-
-
-git status                             # Show status of working directory
-
-git diff                               # Show unstaged changes
-
-git diff --staged                      # Show staged changes
-
-git log                                # View commit history
-
-git log --oneline --graph --decorate   # Compact visual log
-
-git show <commit>                      # Show details about a commit
-
-
-
+```text
+git version 2.xx.x
+```
 
 ---
 
+## 2. Configure Your Identity
 
+```bash
+git config --global user.name "Neda Alipour"
 
-\## 💾 \*\*Adding \& Committing\*\*
+git config --global user.email "your_email@example.com"
 
-
-
-
-git add <file>                         # Stage a file
-
-git add .                              # Stage all modified files
-
-git commit -m "Message"                # Commit staged changes
-
-git commit -am "Message"               # Add + commit tracked files
-
-git restore --staged <file>            # Unstage a file
-
-
-
+git config --list
+```
 
 ---
 
+## 3. Generate SSH Key (Recommended)
 
+```bash
+ssh-keygen -t ed25519 -C "your_email@example.com"
+```
 
-\## 🌿 \*\*Branching \& Merging\*\*
+When asked:
 
+```
+Enter file in which to save the key:
+```
 
+➡ Press **Enter**
 
+When asked:
 
-git branch                             # List branches
+```
+Enter passphrase:
+```
 
-git branch <name>                      # Create a branch
-
-git checkout <name>                    # Switch branch
-
-git checkout -b <name>                 # Create and switch
-
-git merge <branch>                     # Merge branch into current
-
-git branch -d <name>                   # Delete a branch
-
-git branch -D <name>                   # Force delete
-
-
-
+➡ Press **Enter** (or create one)
 
 ---
 
+## 4. Enable SSH Agent (Windows)
 
+Run **PowerShell as Administrator**
 
-\## 🪄 \*\*Rebase \& Cherry-Pick\*\*
+```powershell
+Set-Service ssh-agent -StartupType Automatic
+```
 
+```powershell
+Start-Service ssh-agent
+```
 
+Check:
 
+```powershell
+Get-Service ssh-agent
+```
 
-git rebase <branch>                    # Rebase onto another branch
+Should say:
 
-git rebase -i HEAD~3                   # Interactive rebase (last 3 commits)
-
-git cherry-pick <commit>               # Apply a specific commit
-
-
-
-
----
-
-
-
-\## 🌍 \*\*Working with Remotes\*\*
-
-
-
-
-git remote -v                          # List remotes
-
-git remote add origin <url>            # Add a remote
-
-git push -u origin main                # Push branch to remote (first time)
-
-git push                               # Push changes
-
-git pull                               # Fetch + merge changes
-
-git fetch                              # Download changes but don’t merge
-
-git fetch --all                        # Fetch from all remotes
-
-
-
+```
+Running
+```
 
 ---
 
+## 5. Add Your SSH Key
 
-
-\## 🧹 \*\*Undoing Changes\*\*
-
-
-
-
-git restore <file>                     # Discard unstaged changes
-
-git checkout <commit> -- <file>        # Restore file to a specific commit
-
-git reset HEAD~1                       # Undo last commit (keep changes)
-
-git reset --hard HEAD~1                # Undo last commit (discard changes)
-
-git revert <commit>                    # Make a new commit that undoes the specified commit
-
-
-
+```powershell
+ssh-add $env:USERPROFILE\.ssh\id_ed25519
+```
 
 ---
 
+## 6. Copy Your Public Key
 
+```powershell
+Get-Content $env:USERPROFILE\.ssh\id_ed25519.pub
+```
 
-\## 🧩 \*\*Tagging\*\*
+or
 
+```powershell
+cat $env:USERPROFILE\.ssh\id_ed25519.pub
+```
 
-
-git tag                                # List tags
-
-git tag <name>                         # Create a lightweight tag
-
-git tag -a <name> -m "Message"         # Annotated tag
-
-git push origin <tag>                  # Push a tag
-
-git push origin --tags                 # Push all tags
-
-
-
-
+Copy everything.
 
 ---
 
+## 7. Add the Key to GitHub
 
+GitHub
 
-\## 🧰 \*\*Stashing\*\*
+↓
 
+Settings
 
+↓
 
-git stash                              # Save uncommitted changes
+SSH and GPG Keys
 
-git stash list                         # List stashes
+↓
 
-git stash apply                        # Reapply last stash
+New SSH Key
 
-git stash pop                          # Apply and delete last stash
+↓
 
-git stash drop                         # Delete last stash
-
-
-
----
-
-
-
-\## 🧭 \*\*Collaboration Flow (Typical)\*\*
-
-
-
-1\. `git pull origin main` – Get latest code
-
-2\. `git checkout -b feature/new-feature` – Create new branch
-
-3\. Make changes → `git add .` → `git commit -m "Add new feature"`
-
-4\. `git push origin feature/new-feature` – Push to remote
-
-5\. Open a Pull Request (PR)
-
-6\. Merge PR on remote and delete branch
-
-
+Paste your key
 
 ---
 
+## 8. Test SSH
 
+```bash
+ssh -T git@github.com
+```
 
-\## ⚠️ \*\*Common Fixes\*\*
+Expected:
 
+```
+Hi username!
 
-
-| Situation                         | Solution                                |
-
-| --------------------------------- | --------------------------------------- |
-
-| Undo last commit but keep changes | `git reset HEAD~1`                      |
-
-| Remove all local changes          | `git reset --hard HEAD`                 |
-
-| Resolve merge conflicts           | Edit files → `git add .` → `git commit` |
-
-| Restore deleted file              | `git checkout HEAD -- <file>`           |
-
-| Rename a branch                   | `git branch -m <old> <new>`             |
-
-
+You've successfully authenticated...
+```
 
 ---
 
+# 🔐 HTTPS Authentication (Alternative)
 
+If your remote starts with
 
-\## 🧾 \*\*Aliases (optional, for productivity)\*\*
+```
+https://github.com/...
+```
 
+GitHub **does NOT use your password anymore.**
 
+Use a **Personal Access Token (PAT)** instead.
 
+GitHub
 
-git config --global alias.st status
+↓
 
-git config --global alias.co checkout
+Settings
 
-git config --global alias.br branch
+↓
 
-git config --global alias.cm "commit -m"
+Developer Settings
 
-git config --global alias.lg "log --oneline --graph --decorate --all"
+↓
 
+Personal Access Tokens
 
+↓
 
+Generate New Token
+
+---
+
+# 📁 Creating Repositories
+
+Initialize repository
+
+```bash
+git init
+```
+
+Clone repository
+
+```bash
+git clone <url>
+```
+
+Clone into folder
+
+```bash
+git clone <url> my-folder
+```
+
+---
+
+# 🌍 Remote Repositories
+
+Show remotes
+
+```bash
+git remote -v
+```
+
+Add remote
+
+```bash
+git remote add origin <url>
+```
+
+Change remote
+
+```bash
+git remote set-url origin <url>
+```
+
+Remove remote
+
+```bash
+git remote remove origin
+```
+
+---
+
+# 🔍 Check Current Branch
+
+```bash
+git branch
+```
+
+Current branch has *
+
+---
+
+# 📄 Status
+
+```bash
+git status
+```
+
+Shows
+
+* modified files
+* staged files
+* untracked files
+
+---
+
+# ➕ Stage Changes
+
+One file
+
+```bash
+git add app.py
+```
+
+Everything
+
+```bash
+git add .
+```
+
+---
+
+# 💾 Commit
+
+```bash
+git commit -m "Initial commit"
+```
+
+Commit tracked files only
+
+```bash
+git commit -am "Update API"
+```
+
+---
+
+# 📤 Push
+
+First push
+
+```bash
+git push -u origin main
+```
+
+Later
+
+```bash
+git push
+```
+
+---
+
+# 📥 Pull
+
+```bash
+git pull
+```
+
+Fetch only
+
+```bash
+git fetch
+```
+
+---
+
+# 🌿 Branches
+
+Create
+
+```bash
+git branch feature/login
+```
+
+Switch
+
+```bash
+git switch feature/login
+```
+
+Old way
+
+```bash
+git checkout feature/login
+```
+
+Create + Switch
+
+```bash
+git switch -c feature/login
+```
+
+Old way
+
+```bash
+git checkout -b feature/login
+```
+
+Delete
+
+```bash
+git branch -d feature/login
+```
+
+---
+
+# 🔀 Merge
+
+```bash
+git merge feature/login
+```
+
+---
+
+# 📜 Log
+
+```bash
+git log
+```
+
+Compact
+
+```bash
+git log --oneline
+```
+
+Beautiful graph
+
+```bash
+git log --graph --decorate --all --oneline
+```
+
+---
+
+# 🔄 Undo
+
+Discard changes
+
+```bash
+git restore app.py
+```
+
+Unstage
+
+```bash
+git restore --staged app.py
+```
+
+Undo last commit (keep changes)
+
+```bash
+git reset HEAD~1
+```
+
+Undo everything
+
+```bash
+git reset --hard HEAD
+```
+
+---
+
+# 🎒 Stash
+
+Save work
+
+```bash
+git stash
+```
+
+Restore
+
+```bash
+git stash pop
+```
+
+List
+
+```bash
+git stash list
+```
+
+---
+
+# 🏷 Tags
+
+```bash
+git tag
+```
+
+Create
+
+```bash
+git tag v1.0
+```
+
+Push
+
+```bash
+git push origin --tags
+```
+
+---
+
+# 📂 .gitignore
+
+Ignore files like:
+
+```text
+__pycache__/
+.env
+.vscode/
+*.pyc
+```
+
+---
+
+# 🧹 Useful Commands
+
+Current configuration
+
+```bash
+git config --list
+```
+
+Current user
+
+```bash
+git config user.name
+```
+
+Current email
+
+```bash
+git config user.email
+```
+
+Current remote
+
+```bash
+git remote -v
+```
+
+Current branch
+
+```bash
+git branch
+```
+
+---
+
+# 🚀 Daily Workflow
+
+```bash
+git pull
+```
+
+↓
+
+Edit files
+
+↓
+
+```bash
+git status
+```
+
+↓
+
+```bash
+git add .
+```
+
+↓
+
+```bash
+git commit -m "Describe changes"
+```
+
+↓
+
+```bash
+git push
+```
+
+---
+
+# 🔥 Common Problems
+
+## Forgot to add files
+
+```bash
+git add .
+git commit --amend
+```
+
+---
+
+## Wrong commit message
+
+```bash
+git commit --amend -m "New message"
+```
+
+---
+
+## See remote URL
+
+```bash
+git remote -v
+```
+
+---
+
+## Check if using SSH
+
+```bash
+git remote -v
+```
+
+SSH looks like
+
+```text
+git@github.com:username/project.git
+```
+
+HTTPS looks like
+
+```text
+https://github.com/username/project.git
+```
+
+---
+
+# ⭐ Commands You'll Use Every Day
+
+```bash
+git status
+
+git add .
+
+git commit -m "Message"
+
+git pull
+
+git push
+
+git branch
+
+git switch branch-name
+
+git log --oneline
+
+git stash
+```
 
